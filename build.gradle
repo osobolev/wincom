@@ -3,7 +3,7 @@ description = 'Windows COM wrappers'
 apply plugin: 'java'
 apply plugin: 'maven'
 
-group = 'com.github.osobolev.wincom'
+group = 'com.github.osobolev'
 version = '2.0'
 
 sourceCompatibility = '1.6'
@@ -16,10 +16,8 @@ sourceSets.main.java.srcDirs = ['src']
 jar.manifest.attributes('Implementation-Version': version)
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
-
 
 dependencies {
     compile 'net.sf.jacob-project:jacob:1.14.3'
