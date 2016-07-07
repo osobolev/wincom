@@ -52,6 +52,6 @@ public class Wrapper {
     }
 
     public final String toString() {
-        return instance == null ? null : "Dispatch{" + Integer.toHexString(instance.m_pDispatch) + "}";
+        return instance == null ? null : "Dispatch{" + Long.toHexString(instance.m_pDispatch) + "}";
     }
 }
