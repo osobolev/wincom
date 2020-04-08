@@ -1,13 +1,13 @@
 description = 'Windows COM wrappers'
 
-apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
 
 group = 'com.github.osobolev'
 version = '2.0'
 
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
                          
 compileJava.options.encoding = 'UTF-8'
 
@@ -20,5 +20,17 @@ repositories {
 }
 
 dependencies {
-    compile 'net.sf.jacob-project:jacob:1.14.3'
+    api 'net.sf.jacob-project:jacob:1.14.3'
+}
+
+java {
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
 }
