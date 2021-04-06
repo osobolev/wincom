@@ -1,10 +1,10 @@
 package wincom;
 
-public abstract class ComLogger {
+public interface ComLogger {
 
-    public abstract void error(Throwable error);
+    void error(Throwable error);
 
-    public static class Simple extends ComLogger {
+    class Simple implements ComLogger {
 
         public void error(Throwable error) {
             error.printStackTrace();
