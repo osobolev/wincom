@@ -65,11 +65,12 @@ public final class ExecutionThread implements Runnable {
         return runSomethingInThread(args);
     }
 
-    public synchronized Object runConstructorInThread(Constructor<?> constructor, Object[] args) throws ComException {
+    public synchronized <T> T runConstructorInThread(Constructor<T> constructor, Object[] args) throws ComException {
         this.method = null;
         this.constructor = constructor;
         this.obj = null;
-        return runSomethingInThread(args);
+        Class<T> cls = constructor.getDeclaringClass();
+        return cls.cast(runSomethingInThread(args));
     }
 
     public synchronized void createExecutionThread() {

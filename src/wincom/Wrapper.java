@@ -41,8 +41,7 @@ public class Wrapper {
     }
 
     public final <T> T runConstructorInThread(Constructor<T> constructor, Object[] args) throws ComException {
-        Class<T> cls = constructor.getDeclaringClass();
-        return cls.cast(thread.runConstructorInThread(constructor, args));
+        return thread.runConstructorInThread(constructor, args);
     }
 
     public final void safeRelease() throws ComException {
