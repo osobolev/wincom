@@ -42,6 +42,9 @@ tasks {
     }
 }
 
+val sonatypeUsername: String? by project
+val sonatypePassword: String? by project
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -68,6 +71,16 @@ publishing {
                 }
             }
             from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = sonatypeUsername
+                password = sonatypePassword
+            }
         }
     }
 }
