@@ -11,70 +11,79 @@ public abstract class ComContainer<WT extends Wrapper> {
     private final ComLogger logger;
 
     private ExecutionThread thread = null;
+    private final Object threadLock = new Object();
     private WT rootObject = null;
+    private final Object rootLock = new Object();
 
     protected ComContainer(ComLogger logger) {
         this.logger = logger;
     }
 
-    private synchronized ExecutionThread getExecutionThread() {
-        if (thread != null)
+    private ExecutionThread getExecutionThread() {
+        synchronized (threadLock) {
+            if (thread != null)
+                return thread;
+            thread = new ExecutionThread(logger);
+            thread.createExecutionThread();
             return thread;
-        thread = new ExecutionThread(logger);
-        thread.createExecutionThread();
-        return thread;
-    }
-
-    private synchronized void destroy() {
-        if (thread != null) {
-            thread.release();
-            thread = null;
         }
     }
 
-    private void initRootObject() throws ComException {
-        ExecutionThread thread = getExecutionThread();
-        rootObject = createComObject(thread);
+    private void destroy() {
+        try {
+            synchronized (threadLock) {
+                if (thread != null) {
+                    thread.release();
+                    thread = null;
+                }
+            }
+        } catch (Error | RuntimeException ex) {
+            // ignore
+        }
     }
 
     protected abstract WT createComObject(ExecutionThread thread) throws ComException;
 
-    public final synchronized WT getRootObject(boolean require) throws ComException {
-        if (rootObject == null) {
-            if (require) {
-                initRootObject();
-            }
-        } else {
-            try {
-                testComObject(rootObject);
-            } catch (ComException cex) {
+    public final WT getRootObject(boolean require) throws ComException {
+        synchronized (rootLock) {
+            if (rootObject != null) {
+                // If rootObject already exists, test it; if test is OK, then return tested instance
                 try {
-                    destroy();
-                } catch (Exception ex) {
+                    testComObject(rootObject);
+                    return rootObject;
+                } catch (ComException cex) {
                     // ignore
                 }
-                rootObject = null;
-                if (require) {
-                    initRootObject();
-                }
             }
+            if (rootObject != null) {
+                // rootObject exists, but test failed - destroy bad rootObject (with its associated thread)
+                rootObject = null;
+                destroy();
+            }
+            if (require) {
+                // Create new rootObject (here rootObject is always null)
+                ExecutionThread thread = getExecutionThread();
+                rootObject = createComObject(thread);
+            }
+            return rootObject;
         }
-        return rootObject;
     }
 
     protected abstract void testComObject(WT comObject) throws ComException;
 
-    public final synchronized void release() {
-        try {
-            WT rootObject = getRootObject(false);
-            if (rootObject != null) {
-                quitComObject(rootObject);
-                destroy();
+    public final void release() {
+        synchronized (rootLock) {
+            try {
+                WT rootObject = getRootObject(false);
+                if (rootObject != null) {
+                    quitComObject(rootObject);
+                }
+            } catch (ComException ex) {
+                logger.error(ex);
             }
-        } catch (ComException ex) {
-            logger.error(ex);
+            this.rootObject = null;
+            destroy();
         }
-        this.rootObject = null;
     }
 
     protected abstract void quitComObject(WT comObject) throws ComException;
