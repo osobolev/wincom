@@ -90,11 +90,11 @@ public abstract class ComContainer<WT extends Wrapper> {
     }
 
     public final VariantWrapper variant(int i) throws ComException {
-        return runConstructorInThread(Wrapper.getConstructor(Variant.class, Integer.TYPE), new Object[] {Integer.valueOf(i)});
+        return runConstructorInThread(Wrapper.getConstructor(Variant.class, Integer.TYPE), new Object[] {i});
     }
 
     public final VariantWrapper variant(boolean b) throws ComException {
-        return runConstructorInThread(Wrapper.getConstructor(Variant.class, Boolean.TYPE), new Object[] {Boolean.valueOf(b)});
+        return runConstructorInThread(Wrapper.getConstructor(Variant.class, Boolean.TYPE), new Object[] {b});
     }
 
     public final VariantWrapper variant(Object o) throws ComException {
@@ -110,7 +110,7 @@ public abstract class ComContainer<WT extends Wrapper> {
     public final SafeArrayWrapper array(int len) throws ComException {
         ExecutionThread thread = getExecutionThread();
         Constructor<SafeArray> constructor = Wrapper.getConstructor(SafeArray.class, Integer.TYPE, Integer.TYPE);
-        SafeArray array = (SafeArray) thread.runConstructorInThread(constructor, new Object[] {Variant.VariantString, len});
+        SafeArray array = thread.runConstructorInThread(constructor, new Object[] {Variant.VariantString, len});
         return new SafeArrayWrapper(thread, array);
     }
 

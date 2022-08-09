@@ -46,7 +46,7 @@ public final class ExecutionThread implements Runnable {
                 try {
                     replyWaitLock.wait();
                 } catch (InterruptedException ex) {
-                    //
+                    // ignore
                 }
                 if (replyReady)
                     break;
@@ -105,10 +105,7 @@ public final class ExecutionThread implements Runnable {
     public void run() {
         try {
             ComThread.InitMTA();
-        } catch (Error ex) {
-            startFailed(ex);
-            throw ex;
-        } catch (RuntimeException ex) {
+        } catch (Error | RuntimeException ex) {
             startFailed(ex);
             throw ex;
         }
@@ -132,12 +129,10 @@ public final class ExecutionThread implements Runnable {
                         // todo: add Dispatch.invoke/call
                         result = null;
                     }
-                } catch (IllegalAccessException ex) {
-                    error = ex;
                 } catch (InvocationTargetException itex) {
                     error = itex.getTargetException();
-                } catch (Throwable th) {
-                    error = th;
+                } catch (Throwable ex) {
+                    error = ex;
                 } finally {
                     synchronized (replyWaitLock) {
                         replyReady = true;
@@ -157,7 +152,7 @@ public final class ExecutionThread implements Runnable {
         try {
             thread.join();
         } catch (InterruptedException ex) {
-            //
+            // ignore
         }
     }
 }

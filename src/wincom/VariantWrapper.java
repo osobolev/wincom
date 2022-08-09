@@ -24,7 +24,7 @@ public final class VariantWrapper {
     }
 
     public void putShortRef(short s) throws ComException {
-        runMethodInThread(Wrapper.getMethod(Variant.class, "putShortRef", Short.TYPE), instance, new Object[] {Short.valueOf(s)});
+        runMethodInThread(Wrapper.getMethod(Variant.class, "putShortRef", Short.TYPE), instance, new Object[] {s});
     }
 
     public short getShortRef() throws ComException {
