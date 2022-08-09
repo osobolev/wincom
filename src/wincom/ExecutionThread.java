@@ -42,7 +42,12 @@ public final class ExecutionThread {
             try {
                 return future.get();
             } catch (ExecutionException ex) {
-                throw new ComException(ex.getCause());
+                Throwable cause = ex.getCause();
+                if (cause instanceof ComException) {
+                    throw (ComException) cause;
+                } else {
+                    throw new ComException(cause);
+                }
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 throw new ComException(ex);
