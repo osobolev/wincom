@@ -3,6 +3,7 @@ package wincom;
 import com.jacob.com.ComThread;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.*;
 
@@ -19,13 +20,23 @@ public final class ExecutionThread {
         this.logger = logger;
     }
 
+    private static Throwable getCause(ExecutionException ex) {
+        Throwable cause = ex.getCause();
+        if (cause instanceof InvocationTargetException) {
+            InvocationTargetException itex = (InvocationTargetException) cause;
+            return itex.getCause();
+        } else {
+            return cause;
+        }
+    }
+
     private boolean runInternal(Runnable action) {
         Future<?> future = service.submit(action);
         try {
             future.get();
             return true;
         } catch (ExecutionException ex) {
-            logger.error(ex.getCause());
+            logger.error(getCause(ex));
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
@@ -42,12 +53,8 @@ public final class ExecutionThread {
             try {
                 return future.get();
             } catch (ExecutionException ex) {
-                Throwable cause = ex.getCause();
-                if (cause instanceof ComException) {
-                    throw (ComException) cause;
-                } else {
-                    throw new ComException(cause);
-                }
+                Throwable cause = getCause(ex);
+                throw new ComException(cause);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
                 throw new ComException(ex);

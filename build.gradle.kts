@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.osobolev"
-version = "2.2"
+version = "2.3"
 
 dependencies {
     api("net.sf.jacob-project:jacob:1.14.3")
