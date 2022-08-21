@@ -5,10 +5,10 @@ plugins {
 }
 
 group = "io.github.osobolev"
-version = "2.3"
+version = "2.4"
 
 dependencies {
-    api("net.sf.jacob-project:jacob:1.14.3")
+    api("io.github.osobolev:jacob:1.20")
 }
 
 tasks.jar {
