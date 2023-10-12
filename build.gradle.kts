@@ -9,7 +9,7 @@ group = "io.github.osobolev"
 version = "2.4"
 
 dependencies {
-    api("io.github.osobolev:jacob:1.20")
+    api("io.github.osobolev:jacob:1.21")
 }
 
 tasks.jar {
