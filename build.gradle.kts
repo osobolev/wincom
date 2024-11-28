@@ -12,10 +12,6 @@ dependencies {
     api("io.github.osobolev:jacob:1.21")
 }
 
-tasks.jar {
-    manifest.attributes["Automatic-Module-Name"] = "${project.group}.${project.name}"
-}
-
 (publishing.publications["mavenJava"] as MavenPublication).pom {
     name.set("wincom")
     description.set("Thread-safe wrappers for Windows COM objects")
