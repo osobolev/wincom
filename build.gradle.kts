@@ -1,7 +1,11 @@
+import com.vanniktech.maven.publish.JavaLibrary
+import com.vanniktech.maven.publish.JavadocJar
+
 description = "Windows COM wrappers"
 
 plugins {
     id("com.github.ben-manes.versions") version "0.45.0"
+    id("com.vanniktech.maven.publish") version "0.35.0"
     `module-lib`
 }
 
@@ -12,7 +16,18 @@ dependencies {
     api("io.github.osobolev:jacob:1.21")
 }
 
-(publishing.publications["mavenJava"] as MavenPublication).pom {
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
+
+    coordinates("${project.group}", "${project.name}", "${project.version}")
+    configure(JavaLibrary(
+        javadocJar = JavadocJar.Javadoc(),
+        sourcesJar = true
+    ))
+}
+
+mavenPublishing.pom {
     name.set("wincom")
     description.set("Thread-safe wrappers for Windows COM objects")
     url.set("https://github.com/osobolev/wincom")
