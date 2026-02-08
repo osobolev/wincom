@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SourcesJar
 
 description = "Windows COM wrappers"
 
@@ -23,7 +24,7 @@ mavenPublishing {
     coordinates("${project.group}", "${project.name}", "${project.version}")
     configure(JavaLibrary(
         javadocJar = JavadocJar.Javadoc(),
-        sourcesJar = true
+        sourcesJar = SourcesJar.Sources()
     ))
 }
 
