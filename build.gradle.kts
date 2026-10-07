@@ -28,24 +28,24 @@ mavenPublishing {
 }
 
 mavenPublishing.pom {
-    name.set("wincom")
-    description.set("Thread-safe wrappers for Windows COM objects")
-    url.set("https://github.com/osobolev/wincom")
+    name = "wincom"
+    description = "Thread-safe wrappers for Windows COM objects"
+    url = "https://github.com/osobolev/wincom"
     licenses {
         license {
-            name.set("The Apache License, Version 2.0")
-            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+            name = "The Apache License, Version 2.0"
+            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
         }
     }
     developers {
         developer {
-            name.set("Oleg Sobolev")
-            organizationUrl.set("https://github.com/osobolev")
+            name = "Oleg Sobolev"
+            organizationUrl = "https://github.com/osobolev"
         }
     }
     scm {
-        connection.set("scm:git:https://github.com/osobolev/wincom.git")
-        developerConnection.set("scm:git:https://github.com/osobolev/wincom.git")
-        url.set("https://github.com/osobolev/wincom")
+        connection = "scm:git:https://github.com/osobolev/wincom.git"
+        developerConnection = "scm:git:https://github.com/osobolev/wincom.git"
+        url = "https://github.com/osobolev/wincom"
     }
 }
