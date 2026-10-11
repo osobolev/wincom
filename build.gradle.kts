@@ -10,7 +10,6 @@ plugins {
 }
 
 group = "io.github.osobolev"
-version = "2.5"
 
 dependencies {
     api("io.github.osobolev:jacob:1.21")
